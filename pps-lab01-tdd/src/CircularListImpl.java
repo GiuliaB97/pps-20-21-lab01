@@ -52,11 +52,13 @@ public class CircularListImpl implements CircularList {
 
     @Override
     public Optional<Integer> next(SelectStrategy strategy) {
-        updateDirection(Direction.RIGHT);
+        int count=0;
         if(!list.isEmpty()){
-            checkIndexNextElement();
-            if(strategy.apply(calculateNext().get())){
-                return last_element;
+            while(count<list.size()) {
+                if (strategy.apply(next().get())) {
+                    return last_element;
+                }
+                count++;
             }
         }
         return Optional.empty();
