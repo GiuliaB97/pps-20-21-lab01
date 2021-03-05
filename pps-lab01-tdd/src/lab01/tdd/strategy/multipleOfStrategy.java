@@ -13,6 +13,6 @@ multipleOfStrategy implements SelectStrategy {
 
     @Override
     public boolean apply(int element) {
-        return (this.actual_element%element)==0;
+        return (element%this.actual_element)==0;
     }
 }

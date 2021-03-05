@@ -1,22 +1,19 @@
 package lab01.tdd.strategy;
 
-import java.util.List;
-import java.util.Optional;
-
-public class ConcreteNextFactory implements AbstractFactory{
+public class ConcreteNextFactory implements SelectStrategyAbstractFactory {
 
     @Override
-    public SelectStrategy concreteNextStrategyEven(Integer element) {
+    public SelectStrategy createConcreteNextStrategyEven(Integer element) {
         return new evenStrategy();
     }
 
     @Override
-    public SelectStrategy ConcreteNextStrategyMultipleOf(Integer element) {
+    public SelectStrategy createConcreteNextStrategyMultipleOf(Integer element) {
         return new multipleOfStrategy(element);
     }
 
     @Override
-    public SelectStrategy ConcreteNextStrategyEqual(Integer element) {
+    public SelectStrategy createConcreteNextStrategyEqual(Integer element) {
         return new equalsStrategy(element);
     }
 }

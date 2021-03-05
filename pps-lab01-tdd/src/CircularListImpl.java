@@ -52,24 +52,16 @@ public class CircularListImpl implements CircularList {
 
     @Override
     public Optional<Integer> next(SelectStrategy strategy) {
-        Optional<Integer>starting_element=Optional.empty();
+        updateDirection(Direction.RIGHT);
         if(!list.isEmpty()){
-            while(last_element!=starting_element){
-                last_element=list.get(index_element.get());
-                if(strategy.apply(last_element.get())){
-                    return last_element;
-                }
+            checkIndexNextElement();
+            if(strategy.apply(calculateNext().get())){
+                return last_element;
             }
         }
         return Optional.empty();
     }
     private Optional<Integer> calculateNext(){
-        /*if (last_element.isPresent()) {
-            checkIndexNextElement();
-            updateIndexNextElement();
-        }else if (!Optional.ofNullable(list.get(0)).isEmpty()) {
-            last_element = list.get(0);
-        }*/
         if(!list.isEmpty()){
            checkIndexNextElement();
            updateIndexNextElement();
@@ -88,9 +80,8 @@ public class CircularListImpl implements CircularList {
     }
 
     private void checkIndexNextElement(){
-        if(!index_element.isEmpty()) {
+        if(index_element.isPresent()) {
             if (isOutOfBound(list.indexOf(last_element))) {
-                //last_element = Optional.empty();
                 index_element = Optional.empty();
             } else {
                 index_element = Optional.of(list.indexOf(last_element));
