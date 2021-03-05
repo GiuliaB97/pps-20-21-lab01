@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class
-ConcreteStrategyB implements SelectStrategy {
+multipleOfStrategy implements SelectStrategy {
     protected List<Optional> list;
     protected Optional<Integer> index_element;
     protected Integer last_element;
     protected Integer resulting_element;
 
-    public ConcreteStrategyB(List<Optional> list, Optional<Integer> index_element, Optional<Integer> last_element) {
+    public multipleOfStrategy(List<Optional> list, Optional<Integer> index_element, Optional<Integer> last_element) {
         this.list = list;
         this.index_element = index_element;
         this.last_element = last_element.get();
