@@ -1,5 +1,5 @@
 import lab01.tdd.CircularList;
-import lab01.tdd.SelectStrategy;
+import lab01.tdd.strategy.SelectStrategy;
 
 import java.util.*;
 
