@@ -1,16 +1,20 @@
 import lab01.tdd.CircularList;
+import lab01.tdd.Direction;
 import lab01.tdd.strategy.SelectStrategy;
 
 import java.util.*;
 
 public class CircularListImpl implements CircularList {
+    protected Direction actual_direction;
     protected List<Optional> list;
     protected Optional<Integer> index_element;
     protected Optional<Integer> last_element;
+    protected Integer update_quantity;
 
     public CircularListImpl() {
         this.list = new ArrayList();
-        last_element=Optional.empty();
+        this.last_element=Optional.empty();
+        this.index_element=Optional.of(-1);
     }
 
     @Override
@@ -30,43 +34,14 @@ public class CircularListImpl implements CircularList {
 
     @Override
     public Optional<Integer> next() {
-        if (last_element.isPresent()) {
-            if (outOfBound(list.indexOf(last_element)+1)) {
-                last_element=Optional.empty();
-                index_element=Optional.of(0);
-            }else{
-                index_element = Optional.of(list.indexOf(last_element));
-            }
-        }
-        if(last_element.isPresent()){
-            int a=index_element.get();
-            a++;
-            index_element = Optional.of(a);
-            last_element = list.get(index_element.get());
-        } else if (!Optional.ofNullable(list.get(0)).isEmpty()) {
-            last_element = list.get(0);
-        }
-        return last_element.isPresent()? last_element: Optional.empty();
+        updateDirection(Direction.RIGHT);
+        return calculateNext();
     }
 
     @Override
     public Optional<Integer> previous() {
-        if (last_element.isPresent()) {
-            if (outOfBound(list.indexOf(last_element)-1)) {
-                index_element=Optional.of(list.size());
-            }else{
-                index_element = Optional.of(list.indexOf(last_element));
-            }
-        }
-        if(last_element.isPresent()){
-            int a=index_element.get();
-            a--;
-            index_element = Optional.of(a);
-            last_element = list.get(index_element.get());
-        } else if (!Optional.ofNullable(list.get(0)).isEmpty()) {
-            last_element = list.get(0);
-        }
-        return last_element.isPresent()? last_element: Optional.empty();
+        updateDirection(Direction.LEFT);
+        return calculateNext();
     }
 
     @Override
@@ -77,11 +52,59 @@ public class CircularListImpl implements CircularList {
 
     @Override
     public Optional<Integer> next(SelectStrategy strategy) {
+        Optional<Integer>starting_element=Optional.empty();
+        if(!list.isEmpty()){
+            while(last_element!=starting_element){
+                last_element=list.get(index_element.get());
+                if(strategy.apply(last_element.get())){
+                    return last_element;
+                }
+            }
+        }
         return Optional.empty();
     }
+    private Optional<Integer> calculateNext(){
+        /*if (last_element.isPresent()) {
+            checkIndexNextElement();
+            updateIndexNextElement();
+        }else if (!Optional.ofNullable(list.get(0)).isEmpty()) {
+            last_element = list.get(0);
+        }*/
+        if(!list.isEmpty()){
+           checkIndexNextElement();
+           updateIndexNextElement();
+        }
+        return last_element.isPresent()? last_element: Optional.empty();
+    }
+    private void updateIndexNextElement(){
+        if(!this.index_element.isEmpty()){
+            index_element = Optional.of(index_element.get()+this.update_quantity);
+        }else if(index_element.isEmpty()&& last_element.isEmpty()||index_element.isEmpty()&& this.actual_direction.equals(Direction.RIGHT)){
+            index_element=Optional.of(0);
+        }else{
+            index_element=Optional.of(list.size()-1);
+        }
+        last_element = list.get(index_element.get());
+    }
 
+    private void checkIndexNextElement(){
+        if(!index_element.isEmpty()) {
+            if (isOutOfBound(list.indexOf(last_element))) {
+                //last_element = Optional.empty();
+                index_element = Optional.empty();
+            } else {
+                index_element = Optional.of(list.indexOf(last_element));
+            }
+        }
+    }
 
-    private boolean outOfBound(Integer index) {
-        return index>=list.size()|| index<0;
+    private boolean isOutOfBound(Integer index) {
+        index+=this.update_quantity;
+        return index>=list.size()||index<0;
+    }
+
+    private void updateDirection(Direction direction){
+        this.actual_direction=direction;
+        this.update_quantity=this.actual_direction==Direction.RIGHT ? 1:-1;
     }
 }
