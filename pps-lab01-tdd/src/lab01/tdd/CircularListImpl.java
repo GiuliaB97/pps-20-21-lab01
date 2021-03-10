@@ -1,3 +1,5 @@
+package lab01.tdd;
+
 import lab01.tdd.CircularList;
 import lab01.tdd.Direction;
 import lab01.tdd.strategy.SelectStrategy;

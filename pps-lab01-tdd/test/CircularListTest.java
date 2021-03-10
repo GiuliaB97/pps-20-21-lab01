@@ -1,7 +1,6 @@
 import lab01.tdd.CircularList;
-import org.junit.jupiter.api.Assertions;
+import lab01.tdd.CircularListImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
